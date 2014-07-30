@@ -1,0 +1,120 @@
+<div ng-controller="AccionistaController">
+    <form name="formAccionista" ng-submit="addAccionista()" novalidate>
+        <fieldset>
+            <legend style="background: whitesmoke;">Datos de Accionista</legend>
+            <alert ng-repeat="alert in alertsAccionistas" type="{{alert.type}}" close="closeAlert($index)">
+                <span ng-bind="alert.msg"></span>
+            </alert>
+            <div>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="form-group" ng-class="{ 'has-error' : formAccionista.tipoDocumento.$invalid && (control.submitted || formAccionista.tipoDocumento.$dirty)}">
+                            <label>Tipo Documento</label>
+                            <select focus-on="focusTipoDocumentoAccionista" name="tipoDocumento" ng-options="tipoDocumento.id as tipoDocumento.abreviatura for tipoDocumento in combo.tipoDocumentos | orderBy : 'id'" ng-model="view.idTipoDocumentoAccionista" class="form-control" required autofocus>
+                            	<option value="">--Seleccione--</option>
+                            </select>
+                            <div ng-show="formAccionista.tipoDocumento.$invalid && (control.submitted || formAccionista.tipoDocumento.$dirty)">
+                                <p class="help-block" ng-show="formAccionista.tipoDocumento.$error.required">
+                                    Ingrese Tipo Documento.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group" ng-class="{ 'has-error' : formAccionista.numeroDocumento.$invalid && (control.submitted || formAccionista.numeroDocumento.$dirty)}">
+                            <label>Numero Documento</label>
+                            <div class="input-group">
+                                <input focus-on="focusNumeroDocumentoAccionista" type="text" name="numeroDocumento" ng-model="view.numeroDocumentoAccionista" ng-minlength="1" ng-maxlength="20" ng-pattern="/^[0-9]+$/" class="form-control" placeholder="Numero documento" required/>
+                                 <span class="input-group-btn">
+                                    <button type="button" class="btn btn-default" ng-click="addAccionista()" >
+                                        <span class="glyphicon glyphicon-search"></span>
+                                    </button>
+                                 </span>
+                            </div>
+                            <div ng-show="formAccionista.numeroDocumento.$invalid && (control.submitted || formAccionista.numeroDocumento.$dirty)">
+                                <p class="help-block" ng-show="formAccionista.numeroDocumento.$error.required">
+                                    Ingrese Numero Documento Valido.
+                                </p>
+                                <p class="help-block" ng-show="formAccionista.numeroDocumento.$error.minlength">
+                                    Minimo 1 Caracter.
+                                </p>
+                                <p class="help-block" ng-show="formAccionista.numeroDocumento.$error.maxlength">
+                                    Maximo 20 Caracteres.
+                                </p>
+                                <p class="help-block" ng-show="formAccionista.numeroDocumento.$error.pattern">
+                                    Numero Documento Invalido.
+                                </p>
+                                <p class="help-block" ng-show="formAccionista.numeroDocumento.$error.sgmaxlength">
+                                    Debe tener <span ng-bind="getTipoDocumento().numeroCaracteres"></span> caracteres.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label>&nbsp;</label>
+                            <div>
+                                <button type="button" class="btn btn-link" ng-click="nuevaPersona()">Registrar Persona</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+    <fieldset>
+        <legend>Lista de Accionistas</legend>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="panel panel-default">
+                    <table class="table table-condensed">
+                        <thead>
+                        <tr>
+                            <th>Numero Documento</th>
+                            <th>Ap. Paterno</th>
+                            <th>Ap. Materno</th>
+                            <th>Nombres</th>
+                            <th>Fec. Nacimiento</th>
+                            <th>Sexo</th>
+                            <th>% Participacion</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="accionista in $parent.view.accionistas">
+                            <td><span ng-bind-template="{{accionista.personaNatural.tipoDocumento.abreviatura}}/{{accionista.personaNatural.numeroDocumento}}"/></td>
+                            <td><span ng-bind="accionista.personaNatural.apellidoPaterno"/></td>
+                            <td><span ng-bind="accionista.personaNatural.apellidoMaterno"/></td>
+                            <td><span ng-bind="accionista.personaNatural.nombres"/></td>
+                            <td><span ng-bind="accionista.personaNatural.fechaNacimiento | date : 'dd/MM/yyyy'"/></td>
+                            <td><span ng-bind="accionista.personaNatural.sexo"/></td>
+                            <td>
+                                <ng-form name="porcentajeForm">
+                                    <div class="form-group" ng-class="{ 'has-error' : porcentajeForm.porcentaje.$invalid}" style="margin-bottom: 0px;">
+                                        <input type="text" name="porcentaje" ng-model="accionista.porcentajeParticipacion" class="form-control" ng-pattern="/^(\d+|\d+.\d{1,3})$/" required style="height: 27px;padding: 0px 12px; width: 50%"/>
+                                        <div ng-show="porcentajeForm.porcentaje.$invalid">
+                                            <p class="help-block" ng-show="porcentajeForm.porcentaje.$error.required">
+                                                Ingrese Porcentaje.
+                                            </p>
+                                            <p class="help-block" ng-show="porcentajeForm.porcentaje.$error.minlength">
+                                                Minimo 1 Caracter.
+                                            </p>
+                                            <p class="help-block" ng-show="porcentajeForm.porcentaje.$error.maxlength">
+                                                Maximo 3 Caracteres.
+                                            </p>
+                                            <p class="help-block" ng-show="porcentajeForm.porcentaje.$error.pattern">
+                                                Numero Invalido.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </ng-form>
+                            </td>
+                            <td><button type="button" ng-click="removeAccionista($index)" class="btn btn-danger btn-xs">Delete</button></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+</div>

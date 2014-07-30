@@ -1,0 +1,100 @@
+<div ng-controller="TitularController">
+   <form name="formTitular" ng-submit="addPersona()" novalidate>
+       <fieldset>
+           <legend style="background: whitesmoke;">Datos de Titular</legend>
+           <alert ng-repeat="alert in alertsTitulares" type="{{alert.type}}" close="closeAlert($index)">
+               <span ng-bind="alert.msg"></span>
+           </alert>
+           <div>
+               <div class="row">
+                   <div class="col-sm-4">
+                       <div class="form-group" ng-class="{ 'has-error' : formTitular.tipoDocumento.$invalid && control.submitted}">
+                           <label>Tipo Documento</label>
+                           <label style="color: brown;">(*)</label>
+                           <select focus-on="focusTipoDocumentoTitular" name="tipoDocumento" ng-options="tipoDocumento.id as tipoDocumento.abreviatura for tipoDocumento in combo.tipoDocumentos | orderBy : 'id'" ng-model="view.idTipoDocumentoTitular" class="form-control" required autofocus>
+                           		<option value="">--Seleccione--</option>
+                           </select>
+                           <div ng-show="formTitular.tipoDocumento.$invalid && control.submitted">
+                               <p class="help-block" ng-show="formTitular.tipoDocumento.$error.required">
+                                   Ingrese Tipo Documento.
+                               </p>
+                           </div>
+                       </div>
+                   </div>
+                   <div class="col-sm-4">
+                       <div class="form-group" ng-class="{ 'has-error' : formTitular.numeroDocumento.$invalid && formTitular.numeroDocumento.$dirty}">
+                           <label>Numero Documento</label>
+                           <label style="color: brown;">(*)</label>
+                           <div class="input-group">
+                               <input focus-on="focusNumeroDocumentoTitular" type="text" name="numeroDocumento" ng-model="view.numeroDocumentoTitular" min-length="1" ng-maxlength="20" ng-pattern="/^[0-9]+$/" class="form-control" placeholder="Numero Documento" required/>
+                                 <span class="input-group-btn">
+                                    <button type="button" class="btn btn-default" ng-click="addPersona()" >
+                                        <span class="glyphicon glyphicon-search"></span>
+                                    </button>
+                                 </span>
+                           </div>
+                           <div ng-show="formTitular.numeroDocumento.$invalid && formTitular.numeroDocumento.$dirty">
+                               <p class="help-block" ng-show="formTitular.numeroDocumento.$error.required">
+                                   Ingrese Numero Documento Valido.
+                               </p>
+                               <p class="help-block" ng-show="formTitular.numeroDocumento.$error.minlength">
+                                   Minimo 1 Caracter.
+                               </p>
+                               <p class="help-block" ng-show="formTitular.numeroDocumento.$error.maxlength">
+                                   Maximo 20 Caracteres.
+                               </p>
+                               <p class="help-block" ng-show="formTitular.numeroDocumento.$error.pattern">
+                                   Numero Documento Invalido.
+                               </p>
+                               <p class="help-block" ng-show="formTitular.numeroDocumento.$error.sgmaxlength">
+                                   Debe tener <span ng-bind="getTipoDocumento().numeroCaracteres"></span>.
+                               </p>
+                           </div>
+                       </div>
+                   </div>
+                   <div class="col-sm-4">
+                       <div class="form-group">
+                           <label>&nbsp;</label>
+                           <div>
+                               <button type="button" class="btn btn-link" ng-click="nuevaPersona()">Registrar Persona</button>
+                           </div>
+                       </div>
+                   </div>
+               </div>
+           </div>
+       </fieldset>
+   </form>
+    <fieldset>
+        <legend style="background: whitesmoke;">Lista de Titulares</legend>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="panel panel-default">
+                    <table class="table table-condensed">
+                        <thead>
+                        <tr>
+                            <th>Num. Documento</th>
+                            <th>Apellido Paterno</th>
+                            <th>Apellido Materno</th>
+                            <th>Nombres</th>
+                            <th>Fec. Nacimiento</th>
+                            <th>Sexo</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="persona in $parent.view.titulares | unique">
+                            <td><span ng-bind-template="{{persona.tipoDocumento.abreviatura}}/{{persona.numeroDocumento}}"/></td>
+                            <td><span ng-bind="persona.apellidoPaterno"/></td>
+                            <td><span ng-bind="persona.apellidoMaterno"/></td>
+                            <td><span ng-bind="persona.nombres"/></td>
+                            <td><span ng-bind="persona.fechaNacimiento | date : 'dd/MM/yyyy'"/></td>
+                            <td><span ng-bind="persona.sexo"/></td>
+                            <td><button type="button" ng-click="removePersona($index)" class="btn btn-danger btn-xs">Delete</button></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+</div>

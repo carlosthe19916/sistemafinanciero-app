@@ -1,0 +1,10 @@
+{
+  "realm": "SistemaFinanciero",
+  "realm-public-key": "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCzJr2LqjMc7D/3zEKVnO19hcc+d9FW2+/mFpPKQgY6Oy25Qne6DqL5HfZ917ZF54nHUNS3Kr2sDUmNa7CTiiG/0g0McMrU6+8oCzU24sGPN/jN4/+97RxWWoAweJwnAmyqR9gM51nlfB9krsMGM4EQOuFUKjqBlPWCQvVGvKI1aQIDAQAB",
+  "auth-server-url": "http://192.168.1.33:8080/auth",
+  "ssl-not-required": true,
+  "resource": "SistemaFinanciero",
+  "credentials": {
+    "secret": "94122eb2-bab7-42d0-bddc-adfe3e510dd0"
+  }
+}

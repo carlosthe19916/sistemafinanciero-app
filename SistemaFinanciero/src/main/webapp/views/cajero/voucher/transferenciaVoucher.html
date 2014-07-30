@@ -1,0 +1,103 @@
+<div ng-controller="VoucherTransferenciaBancariaController">
+    <div class="row">
+        <div class="col-md-5" id="voucher">
+            <div>
+                <fieldset>
+                    <legend style="font-size: 18px;">VOUCHER TRANSFERENCIA BANCARIA</legend>
+                </fieldset>
+                <div class="panel panel-default">
+                    <!-- Default panel contents -->
+                    <div class="panel-heading" style="text-align: center;">
+                        <label><strong>C.A.C. CAJA VENTURA</strong></label><br />
+                        <label>TRANSFERENCIA BANCARIA</label>
+                    </div>
+                    <!-- Table -->
+                    <table class="table">
+                        <tbody>
+                        <tr>
+                            <td style="font-size: 13px;">AGENCIA:</td>
+                            <td style="font-size: 13px;">
+                                <span ng-bind="transferenciaCuentaBancaria.agenciaAbreviatura"/>
+                            </td>
+                            <td style="font-size: 13px;">N&deg; TRANS:</td>
+                            <td style="font-size: 13px;">
+                                <span ng-bind="transferenciaCuentaBancaria.id"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="font-size: 13px;">CAJA:</td>
+                            <td style="font-size: 13px;">
+                                <span ng-bind="transferenciaCuentaBancaria.cajaDenominacion"/>
+                                <span ng-bind="'(' + transferenciaCuentaBancaria.cajaAbreviatura + ')'"/>
+                            </td >
+                            <td style="font-size: 13px;">N&deg; OP:</td>
+                            <td style="font-size: 13px;">
+                                <span ng-bind="transferenciaCuentaBancaria.numeroOperacion"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="font-size: 13px;">FECHA:</td>
+                            <td colspan="3" style="font-size: 13px;">
+                                <span ng-bind="transferenciaCuentaBancaria.fecha | date : 'dd/MM/yyyy'"/>
+                                <span ng-bind="transferenciaCuentaBancaria.hora | date : 'HH:mm:ss'"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="font-size: 13px;">CUENTA ORIGEN.:</td>
+                            <td colspan="3" style="font-size: 13px;"><span ng-bind="transferenciaCuentaBancaria.numeroCuentaOrigen"/> </td>
+                        </tr>
+                        <tr>
+                            <td style="font-size: 13px;">CUENTA DESTINO.:</td>
+                            <td colspan="3" style="font-size: 13px;"><span ng-bind="transferenciaCuentaBancaria.numeroCuentaDestino"/> </td>
+                        </tr>
+                        <tr>
+                            <td style="font-size: 13px;">SOCIO:</td>
+                            <td colspan="3" style="font-size: 13px;">
+                                <span ng-bind="transferenciaCuentaBancaria.socio"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="font-size: 13px;">MONEDA:</td>
+                            <td colspan="3" style="font-size: 13px;">
+                                <span ng-bind="transferenciaCuentaBancaria.moneda.denominacion"/>
+                                <span ng-bind="'(' + transferenciaCuentaBancaria.moneda.simbolo + ')'"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="font-size: 13px;">REF:</td>
+                            <td colspan="3" style="font-size: 13px;">
+                                <span ng-bind="transferenciaCuentaBancaria.referencia"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="font-size: 13px;">IMPORTE PAGADO:</td>
+                            <td colspan="2" style="text-align: right;" style="font-size: 13px;">
+                                <span ng-bind="transferenciaCuentaBancaria.moneda.simbolo"></span>
+                                <span ng-bind="transferenciaCuentaBancaria.monto | number : 2"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="4" style="text-align: center; font-size: 12px">
+                                <p>&nbsp;</p>
+                                <p>Verifique su dinero antes de retirarse de ventanilla.</p>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <button type="button" class="btn btn-success" ng-click="imprimir()">Imprimir</button>
+                <button type="button" class="btn btn-primary" ng-click="salir()">Continuar »</button>
+            </div>
+        </div>
+    </div>
+</div>
+<applet id="qz"
+        archive="bower_components/qz-print/qz-print.jar"
+        name="QZ Print Plugin" code="qz.PrintApplet.class"
+        width="55"
+        height="55">
+    <param name="jnlp_href" value="bower_components/qz-print/qz-print_jnlp.jnlp">
+    <param name="cache_option" value="plugin">
+    <param name="disable_logging" value="false">
+    <param name="initial_focus" value="false">
+</applet>

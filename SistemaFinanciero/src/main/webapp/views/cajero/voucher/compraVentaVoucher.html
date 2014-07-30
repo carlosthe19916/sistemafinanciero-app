@@ -1,0 +1,88 @@
+<div ng-controller="VoucherCompraVentaController">
+    <div class="row">
+        <div class="col-md-5" id="voucher">
+            <div>
+                <fieldset>
+                    <legend style="font-size: 18px;">VOUCHER COMPRA / VENTA</legend>
+                </fieldset>
+                <div class="panel panel-default">
+                    <!-- Default panel contents -->
+                    <div class="panel-heading" style="text-align: center;">
+                        <label><strong>C.A.C. CAJA VENTURA</strong></label><br />
+                        <span style="font-weight: bold;" ng-bind="compraVentaMoneda.tipoTransaccion"/>
+                        <label>M. E.</label>
+                    </div>
+                    <!-- Table -->
+                    <table class="table">
+                        <tbody>
+                        <tr>
+                            <td style="font-size: 13px;">AGENCIA:</td>
+                            <td style="font-size: 13px;">
+                                <span ng-bind="compraVentaMoneda.agenciaAbreviatura"/>
+                            </td>
+                            <td style="font-size: 13px;">N&deg; TRANS:</td>
+                            <td style="font-size: 13px;">
+                                <span ng-bind="compraVentaMoneda.id"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="font-size: 13px;">CAJA:</td>
+                            <td style="font-size: 13px;">
+                                <span ng-bind="compraVentaMoneda.cajaDenominacion"/>
+                                <span ng-bind="'(' + compraVentaMoneda.cajaAbreviatura + ')'"/>
+                            </td >
+                            <td style="font-size: 13px;">N&deg; OP:</td>
+                            <td style="font-size: 13px;">
+                                <span ng-bind="compraVentaMoneda.numeroOperacion"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="font-size: 13px;">FECHA:</td>
+                            <td colspan="3" style="font-size: 13px;">
+                                <span ng-bind="compraVentaMoneda.fecha | date : 'dd/MM/yyyy'"/>
+                                <span ng-bind="compraVentaMoneda.hora | date : 'HH:mm:ss'"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="font-size: 13px;">RECIBIDO:</td>
+                            <td colspan="3" style="font-size: 13px;"><span ng-bind="compraVentaMoneda.montoRecibido | currency : compraVentaMoneda.monedaRecibida.simbolo"/> </td>
+                        </tr>
+                        <tr>
+                            <td style="font-size: 13px;">ENTREGADO:</td>
+                            <td colspan="3" style="font-size: 13px;"><span ng-bind="compraVentaMoneda.montoEntregado | currency : compraVentaMoneda.monedaEntregada.simbolo"/> </td>
+                        </tr>
+                        <tr>
+                            <td style="font-size: 13px;">TIPO CAMBIO:</td>
+                            <td colspan="3" style="font-size: 13px;"><span ng-bind="compraVentaMoneda.tipoCambio | currency : compraVentaMoneda.monedaEntregada.simbolo"/> </td>
+                        </tr>
+                        <tr>
+                            <td style="font-size: 13px;">CLIENTE:</td>
+                            <td colspan="3" style="font-size: 13px;">
+                                <span ng-bind="compraVentaMoneda.referencia"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="4" style="text-align: center; font-size: 12px">
+                                <p>&nbsp;</p>
+                                <p>Verifique su dinero antes de retirarse de ventanilla.</p>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <button type="button" class="btn btn-success" ng-click="imprimir()">Imprimir</button>
+                <button type="button" class="btn btn-primary" ng-click="salir()">Continuar »</button>
+            </div>
+        </div>
+    </div>
+</div>
+<applet id="qz"
+        archive="bower_components/qz-print/qz-print.jar"
+        name="QZ Print Plugin" code="qz.PrintApplet.class"
+        width="55"
+        height="55">
+    <param name="jnlp_href" value="bower_components/qz-print/qz-print_jnlp.jnlp">
+    <param name="cache_option" value="plugin">
+    <param name="disable_logging" value="false">
+    <param name="initial_focus" value="false">
+</applet>

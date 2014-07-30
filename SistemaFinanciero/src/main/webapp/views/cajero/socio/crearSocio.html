@@ -1,0 +1,219 @@
+<div>
+    <fieldset>
+        <legend>Apertura Cuenta Aportes</legend>
+    </fieldset>
+    <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">
+        <span ng-bind="alert.msg"></span>
+    </alert>
+    <form name="formCrearSocio" ng-submit="crearTransaccion()" novalidate>
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="form-group" ng-class="{ 'has-error' : formCrearSocio.tipoPersona.$invalid && (control.submitted || formCrearSocio.tipoPersona.$dirty)}">
+                    <label>Tipo Persona</label>
+                    <label style="color: brown;">(*)</label>
+                    <select focus-on="focusTipoPersona" name="tipoPersona" ng-options="tipoPersona.denominacion as tipoPersona.denominacion for tipoPersona in combo.tipoPersonas" ng-model="view.tipoPersona" ng-change="tipoPersonaChange()" class="form-control" required autofocus>
+                    	<option value="">--Seleccione--</option>
+                    </select>
+                    <div ng-show="formCrearSocio.tipoPersona.$invalid && (control.submitted || formCrearSocio.tipoPersona.$dirty)">
+                        <p class="help-block" ng-show="formCrearSocio.tipoPersona.$error.required">
+                            Seleccione Tipo Persona.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="form-group" ng-class="{ 'has-error' : formCrearSocio.tipoDocumentoSocio.$invalid && (control.submitted || formCrearSocio.tipoDocumentoSocio.$dirty)}">
+                    <label>Tipo Documento Socio</label>
+                    <label style="color: brown;">(*)</label>
+                    <select name="tipoDocumentoSocio" ng-options="tipoDocumento.id as tipoDocumento.abreviatura for tipoDocumento in combo.tipoDocumentosSocio | orderBy : 'id'" ng-model="view.idTipoDocumentoSocio" class="form-control" required>
+                    	<option value="">--Seleccione--</option>
+                    </select>
+                    <div ng-show="formCrearSocio.tipoDocumentoSocio.$invalid && (control.submitted || formCrearSocio.tipoDocumentoSocio.$dirty)">
+                        <p class="help-block" ng-show="formCrearSocio.tipoDocumentoSocio.$error.required">
+                            Seleccione Tipo Documento.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group" ng-class="{ 'has-error' : formCrearSocio.numeroDocumentoSocio.$invalid && (control.submitted || formCrearSocio.numeroDocumentoSocio.$dirty)}">
+                    <label>N&uacute;mero Documento Socio</label>
+                    <label style="color: brown;">(*)</label>
+                    <div class="input-group">
+                        <input focus-on="focusNumeroDocumentoSocio" type="text" name="numeroDocumentoSocio" ui-keypress="{13:'buscarPersonaSocio($event)'}" ng-model="view.numeroDocumentoSocio" ng-minlength="1" ng-maxlength="20" ng-trim="false" ng-pattern="/^[0-9]+$/" class="form-control" placeholder="Numero Documento" required/>
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-default" ng-click="buscarPersonaSocio()" >
+                                <span class="glyphicon glyphicon-search"></span>
+                            </button>
+                        </span>
+                    </div>
+                    <div ng-show="formCrearSocio.numeroDocumentoSocio.$invalid && (control.submitted || formCrearSocio.numeroDocumentoSocio.$dirty)">
+                        <p class="help-block" ng-show="formCrearSocio.numeroDocumentoSocio.$error.required">
+                            Ingrese Numero Documento Valido.
+                        </p>
+                        <p class="help-block" ng-show="formCrearSocio.numeroDocumentoSocio.$error.minlength">
+                            Minimo 1 Caracter.
+                        </p>
+                        <p class="help-block" ng-show="formCrearSocio.numeroDocumentoSocio.$error.maxlength">
+                            Maximo <span ng-bind="transaccion.tipoDocumentoSocio.numeroCaracteres"/> Caracteres.
+                        </p>
+                        <p class="help-block" ng-show="formCrearSocio.numeroDocumentoSocio.$error.pattern">
+                            Numero Documento Invalido.
+                        </p>
+                        <p class="help-block" ng-show="formCrearSocio.numeroDocumentoSocio.$error.sgmaxlength">
+                            Debe tener <span ng-bind="getTipoDocumentoSocio().numeroCaracteres"></span> caracteres.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4" ng-show="!objetosCargados.socio">
+                <div class="form-group">
+                    <label>&nbsp;</label>
+                    <div class="input-group">
+                        <button type="button" ng-click="crearPersonaSocio()" class="btn btn-link">Registrar Persona</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="form-group" ng-class="{ 'has-error' : formCrearSocio.tipoDocumentoApoderado.$invalid && (control.submitted || formCrearSocio.tipoDocumentoApoderado.$dirty)}">
+                    <label>Tipo Documento Apoderado</label>
+                    <select name="tipoDocumentoApoderado" ng-options="tipoDocumento.id as tipoDocumento.abreviatura for tipoDocumento in combo.tipoDocumentosApoderado | orderBy : 'id'" ng-model="view.idTipoDocumentoApoderado" class="form-control">
+                    	<option value="">--Seleccione--</option>
+                    </select>
+                    <div ng-show="formCrearSocio.tipoDocumentoApoderado.$invalid && (control.submitted || formCrearSocio.tipoDocumentoApoderado.$dirty)">
+                        <p class="help-block" ng-show="formCrearSocio.tipoDocumentoApoderado.$error.required">
+                            Seleccione Tipo Documento.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group" ng-class="{ 'has-error' : formCrearSocio.numeroDocumentoApoderado.$invalid && (control.submitted || formCrearSocio.numeroDocumentoApoderado.$dirty)}">
+                    <label>Numero Documento Apoderado</label>
+                    <div class="input-group">
+                        <input focus-on="focusNumeroDocumentoApoderado" type="text" name="numeroDocumentoApoderado" ui-keypress="{13:'buscarPersonaApoderado($event)'}" ng-model="view.numeroDocumentoApoderado" ng-minlength="1" ng-maxlength="20" ng-trim="true" ng-pattern="/^[0-9]+$/" class="form-control" placeholder="Numero Documento"/>
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-default" ng-click="buscarPersonaApoderado()" >
+                                <span class="glyphicon glyphicon-search"></span>
+                            </button>
+                        </span>
+                    </div>
+                    <div ng-show="formCrearSocio.numeroDocumentoApoderado.$invalid && (control.submitted || formCrearSocio.numeroDocumentoApoderado.$dirty)">
+                        <p class="help-block" ng-show="formCrearSocio.numeroDocumentoApoderado.$error.required">
+                            Ingrese Numero Documento Valido.
+                        </p>
+                        <p class="help-block" ng-show="formCrearSocio.numeroDocumentoApoderado.$error.minlength">
+                            Minimo 1 Caracter.
+                        </p>
+                        <p class="help-block" ng-show="formCrearSocio.numeroDocumentoApoderado.$error.maxlength">
+                            Maximo <span ng-bind="transaccion.tipoDocumentoSocio.numeroCaracteres"/> Caracteres.
+                        </p>
+                        <p class="help-block" ng-show="formCrearSocio.numeroDocumentoApoderado.$error.pattern">
+                            Numero Documento Invalido.
+                        </p>
+                        <p class="help-block" ng-show="formCrearSocio.numeroDocumentoApoderado.$error.sgmaxlength">
+                            Debe tener <span ng-bind="getTipoDocumentoApoderado().numeroCaracteres"></span> caracteres.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4" ng-show="!objetosCargados.apoderado">
+                <div class="form-group" ng-class="{ 'has-error' : formCrearPendiente.boveda.$invalid && control.submitted}">
+                    <label>&nbsp;</label>
+                    <div class="input-group">
+                        <button type="button" class="btn btn-link" ng-click="crearPersonaApoderado()">Registrar Persona</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-5">
+                <div class="form-group">
+                    <div class="panel panel-default">
+                        <!-- Default panel contents -->
+                        <div class="panel-heading" style="font-weight: bold;">Socio</div>
+                        <div class="panel-body" ng-hide="objetosCargados.socio">
+                            <p>No Registrado</p>
+                        </div>
+                        <table class="table" ng-show="objetosCargados.socio">
+
+                            <tbody ng-show="view.tipoPersona == 'NATURAL'">
+                            <tr>
+                                <td style="font-weight: bold; font-size: 12px;">Documento:</td>
+                                <td style="font-size: 12px;"><span ng-bind-template="{{objetosCargados.socio.tipoDocumento.abreviatura}}/{{objetosCargados.socio.numeroDocumento}}"/></td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: bold; font-size: 12px;">Ap. y Nombres:</td>
+                                <td style="font-size: 12px;"><span ng-bind-template="{{objetosCargados.socio.apellidoPaterno}} {{objetosCargados.socio.apellidoMaterno}}, {{objetosCargados.socio.nombres}}"/></td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: bold; font-size: 12px;">Fecha Nac:</td>
+                                <td style="font-size: 12px;"><span ng-bind="objetosCargados.socio.fechaNacimiento | date:'dd/MM/yyyy'"/></td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: bold; font-size: 12px;">Sexo:</td>
+                                <td style="font-size: 12px;"><span ng-bind="objetosCargados.socio.sexo"/></td>
+                            </tr>
+                            </tbody>
+
+                            <tbody ng-show="view.tipoPersona == 'JURIDICA'">
+                            <tr>
+                                <td style="font-weight: bold; font-size: 12px;">Documento:</td>
+                                <td style="font-size: 12px;"><span ng-bind-template="{{objetosCargados.socio.tipoDocumento.abreviatura}}/{{objetosCargados.socio.numeroDocumento}}"/></td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: bold; font-size: 12px;">Razón Social:</td>
+                                <td style="font-size: 12px;"><span ng-bind="objetosCargados.socio.razonSocial"/></td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: bold; font-size: 12px;">Fecha Const:</td>
+                                <td style="font-size: 12px;"><span ng-bind="objetosCargados.socio.fechaConstitucion | date:'dd/MM/yyyy'"/></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-5">
+                <div>
+                    <div class="panel panel-default">
+                        <!-- Default panel contents -->
+                        <div class="panel-heading" style="font-weight: bold;">Apoderado</div>
+                        <div class="panel-body" ng-hide="objetosCargados.apoderado">
+                            <p>No Registrado</p>
+                        </div>
+                        <table class="table" ng-show="objetosCargados.apoderado">
+                           <tbody>
+                           <tr>
+                               <td style="font-weight: bold; font-size: 12px;">Documento:</td>
+                               <td style="font-size: 12px;"><span ng-bind-template="{{objetosCargados.apoderado.tipoDocumento.abreviatura}}/{{objetosCargados.apoderado.numeroDocumento}}"/></td>
+                           </tr>
+                           <tr>
+                               <td style="font-weight: bold; font-size: 12px;">Ap. y Nombres:</td>
+                               <td style="font-size: 12px;"><span ng-bind-template="{{objetosCargados.apoderado.apellidoPaterno}} {{objetosCargados.apoderado.apellidoMaterno}}, {{objetosCargados.apoderado.nombres}}"/></td>
+                           </tr>
+                           <tr>
+                               <td style="font-weight: bold; font-size: 12px;">Fecha Nac:</td>
+                               <td style="font-size: 12px;"><span ng-bind="objetosCargados.apoderado.fechaNacimiento | date:'dd/MM/yyyy'"/></td>
+                           </tr>
+                           <tr>
+                               <td style="font-weight: bold; font-size: 12px;">Sexo:</td>
+                               <td style="font-size: 12px;"><span ng-bind="objetosCargados.apoderado.sexo"/></td>
+                           </tr>
+                           </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Provides extra visual weight and identifies the primary action in a set of buttons -->
+        <button type="submit" class="btn btn-primary" ng-disabled="buttonDisableState()">Guardar</button>
+        <button type="button" class="btn btn-default" ng-click="cancelar()">Cancelar</button>
+    </form>
+</div>

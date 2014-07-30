@@ -1,0 +1,62 @@
+<div ng-controller="BuscarSocioController">
+    <br/>
+    <div class="row">
+        <form name="formBuscar" ng-submit="getPagedDataSearched()" novalidate>
+            <div class="col-sm-8">
+                <div class="form-group">
+                    <div class="input-group">
+                        <input focus-on="focusFilterText" type="text" name="filterText" class="form-control" ng-model="filterOptions.filterText" placeholder="N&uacute;mero Documento / Socio" capitalize autofocus>
+                        <span class="input-group-btn">
+                            <button type="submit" class="btn btn-default">
+                                <span class="glyphicon glyphicon-search"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <button type="button" ng-click="changeStateBusquedaAvanzada()" class="btn btn-link">Avanzado</button>
+            </div>
+        </form>
+    </div>
+    <div class="row" collapse="view.busquedaAvanzada">
+        <div class="col-sm-12">
+            <label class="radio-inline">
+                <input type="radio" ng-model="searchOptions.estadoCuentaAporte" ng-value="false">
+                Socio con cta.aporte
+            </label>
+            <label class="radio-inline">
+                <input type="radio" ng-model="searchOptions.estadoCuentaAporte" ng-value="true">
+                Socio con/sin cta.aporte
+            </label>
+            &nbsp;&nbsp;||&nbsp;&nbsp;
+            <label class="radio-inline">
+                <input type="radio" ng-model="searchOptions.estadoSocio" ng-value="true">
+                Socio activo
+            </label>
+            <label class="radio-inline">
+                <input type="radio" ng-model="searchOptions.estadoSocio" ng-value="false">
+                Socio inactivo
+            </label>
+            <label class="radio-inline">
+                <input type="radio" ng-model="searchOptions.estadoSocio" ng-value="null">
+                Todos
+            </label>
+        </div>
+    </div>
+    <br/>
+    <div class="row">
+        <div class="col-sm-8">
+            <div class="form-group">
+                <button type="button" ng-click="nuevo()" class="btn btn-primary">Nuevo</button>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="form-group">
+                <div ng-grid="gridOptions" style="border: 1px solid rgb(212,212,212); height: 393px; font-size: 12px"></div>
+            </div>
+        </div>
+    </div>
+</div>

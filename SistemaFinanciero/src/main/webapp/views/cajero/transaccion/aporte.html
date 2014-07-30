@@ -1,0 +1,157 @@
+<div ng-controller="CrearAporteController">
+    <fieldset>
+        <legend>Aporte de Socio</legend>
+
+        <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">
+            {{alert.msg}}
+        </alert>
+
+        <form name="formCrearTransaccion" ng-submit="crearTransaccion()" novalidate>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title" style="font-weight: bold;">Datos de Aporte</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="form-group" ng-class="{ 'has-error' : formCrearTransaccion.socio.$invalid && control.submitted}">
+                                        <label>Socio</label>
+                                        <label style="color: brown;">(*)</label>
+                                        <div class="input-group">
+                                            <input type="text" name="socio" ng-model="objetosCargados.socio.socio" class="form-control" placeholder="Socio" readonly required/>
+                                              <span class="input-group-btn">
+                                                <button focus-on="focusBuscarSocio" type="button" class="btn btn-default" ng-click="openBuscarSocio()" autofocus>
+                                                    <span class="glyphicon glyphicon-search"></span>
+                                                </button>
+                                              </span>
+                                        </div>
+                                        <div ng-show="formCrearTransaccion.socio.$invalid && control.submitted">
+                                            <p class="help-block" ng-show="formCrearTransaccion.socio.$error.required">
+                                                Ingrese Socio.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group" ng-class="{ 'has-error' : formCrearTransaccion.monto.$invalid && (control.submitted || formCrearTransaccion.monto.$dirty)}">
+                                        <label>Monto</label>
+                                        <label style="color: brown;">(*)</label>
+                                        <div class="input-group">
+                                            <input focus-on="focusMonto" type="text" name="monto" ng-model="view.monto" ng-minlength="1" ng-maxlength="6" ng-pattern="/^(\d+|\d+.\d{1,2})$/" class="form-control" placeholder="Monto" required/>
+                                              <span class="input-group-btn">
+                                                <button type="button" class="btn btn-default" ng-click="openCalculadora()" ng-disabled="true">
+                                                    <span class="glyphicon glyphicon-th-list"></span>
+                                                </button>
+                                              </span>
+                                        </div>
+                                        <div ng-show="formCrearTransaccion.monto.$invalid && (control.submitted || formCrearTransaccion.monto.$dirty)">
+                                            <p class="help-block" ng-show="formCrearTransaccion.monto.$error.required">
+                                                Ingrese Monto valido.
+                                            </p>
+                                            <p class="help-block" ng-show="formCrearTransaccion.monto.$error.minlength">
+                                                Numero invalido.
+                                            </p>
+                                            <p class="help-block" ng-show="formCrearTransaccion.monto.$error.maxlength">
+                                                Numero invalido.
+                                            </p>
+                                            <p class="help-block" ng-show="formCrearTransaccion.monto.$error.pattern">
+                                                Numero invalido (Ejemplo: 99.99).
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>&nbsp;</label>
+                                        <kbd style="display: block;margin-top: 3px;">
+                                            <span ng-bind="view.monto | currency : 'S/.'"/>
+                                        </kbd>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group" ng-class="{ 'has-error' : formCrearTransaccion.mes.$invalid && control.submitted}">
+                                        <label>Mes</label>
+                                        <label style="color: brown;">(*)</label>
+                                        <select focus-on="focusMes" name="mes" ng-options="mes as mes.denominacion for mes in combo.mes" ng-model="view.mes" class="form-control" ng-required="true" required>
+                                        	<option value="">--Seleccione--</option>
+                                        </select>
+                                        <div ng-show="formCrearTransaccion.mes.$invalid && control.submitted">
+                                            <p class="help-block" ng-show="formCrearTransaccion.mes.$error.required">
+                                                Ingrese Mes.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group" ng-class="{ 'has-error' : formCrearTransaccion.anio.$invalid && control.submitted}">
+                                        <label>Año</label>
+                                        <label style="color: brown;">(*)</label>
+                                        <div class="input-group">
+                                            <input type="text" name="anio" ng-model="view.anio" class="form-control" placeholder="Año" required/>
+                                              <span class="input-group-btn">
+                                                <button type="button" class="btn btn-default" ng-click="buscarHistorialAportes()" ng-disabled="!objetosCargados.socio">
+                                                    <span class="glyphicon glyphicon-th-list"></span>
+                                                </button>
+                                              </span>
+                                        </div>
+                                        <div ng-show="formCrearTransaccion.anio.$invalid && control.submitted">
+                                            <p class="help-block" ng-show="formCrearTransaccion.anio.$error.required">
+                                                Ingrese A&ntilde;o Valido.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="form-group" ng-class="{ 'has-error' : formCrearTransaccion.referencia.$invalid && (control.submitted || formCrearTransaccion.referencia.$dirty)}">
+                                        <label>Referencia</label>
+                                        <textarea focus-on="focusReferencia" name="referencia" class="form-control" rows="3" ng-model="view.referencia" ng-maxlength="50" placeholder="Referencia"></textarea>
+                                    </div>
+                                    <div ng-show="formCrearTransaccion.referencia.$invalid && (control.submitted || formCrearTransaccion.referencia.$dirty)">
+                                        <p class="help-block" ng-show="formCrearTransaccion.referencia.$error.maxlength">
+                                            Maximo 50 caracteres.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary" ng-disabled="buttonDisableState()" focus-on="focusGuardar">Aceptar</button>
+                            <button type="button" class="btn btn-default" ng-click="cancel()">Cancelar</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="panel panel-default">
+                        <div class="panel-heading"><h3 class="panel-title" style="font-weight: bold;">Socio</h3></div>
+                        <table class="table">
+                            <tr>
+                                <td><strong>Socio:</strong></td>
+                                <td><span ng-bind="objetosCargados.socio.socio"></span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Documento:</strong></td>
+                                <td><span ng-bind-template="{{objetosCargados.socio.tipoDocumento}}/{{objetosCargados.socio.numeroDocumento}}"></span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Fecha Asociado:</strong></td>
+                                <td><span ng-cloak>{{objetosCargados.socio.fechaAsociado}}</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Estado Socio:</strong></td>
+                                <td><span ng-cloak>{{objetosCargados.socio.estado ? 'ACTIVO' : 'INACTIVO'}}</span></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </fieldset>
+</div>
