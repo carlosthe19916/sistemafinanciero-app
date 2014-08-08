@@ -2,7 +2,7 @@ define(['./app'], function(app) {
     'use strict';
     return app.config(function($stateProvider, $urlRouterProvider, RestangularProvider) {
 
-        RestangularProvider.setBaseUrl('http://192.168.1.33:8080/RestApi/services');
+        RestangularProvider.setBaseUrl('http://localhost:8080/RestApi/services');
         
         $urlRouterProvider.when('', '/app/home');
 
